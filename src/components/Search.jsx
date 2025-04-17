@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react';
 
 const Search = ({searchTerm, setSearchTerm}) => {
+  const [placeholder, setPlaceholder] = useState('Search through thousands of Anime.');
 
   return (
     <div className='search'>
@@ -9,12 +10,15 @@ const Search = ({searchTerm, setSearchTerm}) => {
 
             <input 
             type="text"
-            placeholder='Search through thousands of anime.'
+            placeholder={placeholder}
             value={searchTerm}
+            onFocus={() => setPlaceholder('')} // Clear placeholder on focus
+            onBlur={() => {
+              if (!searchTerm) setPlaceholder('Search through thousands of Anime.'); // Restore placeholder if input is empty
+            }}
             onChange={(event) => setSearchTerm(event.target.value)}
             />
         </div>
-
     </div>
   )
 }
