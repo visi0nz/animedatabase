@@ -44,7 +44,7 @@
   }
 
   header img {
-    @apply w-full max-w-sm sm:max-w-sm lg:max-w-xs h-auto object-contain mx-auto drop-shadow-md;
+    @apply w-full max-w-xs sm:max-w-xs lg:max-w-xs h-auto object-contain mx-auto drop-shadow-md;
   }
 }
 
@@ -136,9 +136,19 @@
       @apply capitalize text-gray-100 font-medium text-base;
     }
 
-    & .content .year {
-      @apply text-gray-100 font-medium text-base;
+    & .content .release-year {
+      @apply text-gray-100 font-medium text-base text-sm;
     }
+
+    & .content .episodes {
+      @apply text-gray-100 font-medium text-base text-sm;
+    }
+
+    & .content .genre {
+      @apply text-gray-100 font-medium text-base text-sm;
+    }
+
+
   }
 }
 

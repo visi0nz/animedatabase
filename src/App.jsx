@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Search from './components/Search';
 import Spinner from './components/Spinner';
+import AnimeCard from './components/AnimeCard';
 
 const API_BASE_URL = 'https://api.jikan.moe/v4/anime';
 
@@ -31,7 +32,11 @@ const App = () => {
       const data = response.data.data.map((anime) => ({
         id: anime.mal_id,
         title: anime.title,
-        image: anime.images.jpg.image_url,
+        images: anime.images,
+        score: anime.score,
+        aired: anime.aired, // Include the aired field
+        genres: anime.genres,
+        episodes: anime.episodes,
       }));
   
       setAnimeList(data); // Update the anime list state
@@ -73,10 +78,7 @@ const App = () => {
           ) : (
             <ul>
               {animeList.map((anime) => (
-                <li key={anime.id} className="anime-item">
-                  <img src={anime.image} alt={anime.title} className="anime-image" />
-                  <p className="text-white">{anime.title}</p>
-                </li>
+                <AnimeCard key={anime.id} anime={anime} />
               ))}
             </ul>
           )}
