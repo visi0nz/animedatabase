@@ -1,29 +1,53 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Search from './components/Search';
+import Spinner from './components/Spinner';
 
-const API_BASE_URL = 'https://api.myanimelist.net/v2';
-const API_KEY = import.meta.env.REACT_APP_MAL_CLIENT_ID;
+const API_BASE_URL = 'https://api.jikan.moe/v4/anime';
+
+
+
 
 const App = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [animeList, setAnimeList] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const fetchAnime = async () => {
+  const fetchAnime = async (query = '') => {
+    setIsLoading(true);
+    setErrorMessage('');
+
     try {
-      const endpoint = `http://localhost:5173/api/anime?q=${searchTerm}`;
+      const endpoint = `https://api.jikan.moe/v4/anime?q=${encodeURIComponent(query)}&limit=20`;
+
       const response = await axios.get(endpoint);
+
+      if (response.status !== 200) {
+        throw new Error('Failed to fetch anime');
+      }
   
-      console.log(response.data); // Log the fetched data
+      // Extract relevant data from the response
+      const data = response.data.data.map((anime) => ({
+        id: anime.mal_id,
+        title: anime.title,
+        image: anime.images.jpg.image_url,
+      }));
+  
+      setAnimeList(data); // Update the anime list state
     } catch (error) {
-      console.error(`Error fetching Anime: ${error}`);
-      setErrorMessage('Error fetching Anime. Please try again later.');
+      console.error(`Error fetching anime: ${error}`);
+      setErrorMessage('Error fetching anime. Please try again later.');
+    } finally {
+      setIsLoading(false);
     }
-  };
+  }
 
   useEffect(() => {
-    fetchAnime();
-  }, []);
+    if (searchTerm) {
+      fetchAnime(searchTerm);
+    }
+  }, [searchTerm]);
 
   return (
     <main>
@@ -40,13 +64,26 @@ const App = () => {
         </header>
 
         <section className="all-anime">
-          <h2>All Anime</h2>
+          <h2 className='mt-[40px]'>All Anime</h2>
 
-          {errorMessage && <p className="text-red-500">{errorMessage}</p>}
+          {isLoading ? (
+            <Spinner />
+          ) : errorMessage ? (
+            <p className="text-red-500">{errorMessage}</p>
+          ) : (
+            <ul>
+              {animeList.map((anime) => (
+                <li key={anime.id} className="anime-item">
+                  <img src={anime.image} alt={anime.title} className="anime-image" />
+                  <p className="text-white">{anime.title}</p>
+                </li>
+              ))}
+            </ul>
+          )}
         </section>
       </div>
     </main>
-  );
-};
+  )
+}
 
 export default App;
