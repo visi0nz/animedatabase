@@ -3,10 +3,10 @@ import axios from 'axios';
 import Search from './components/Search';
 import Spinner from './components/Spinner';
 import AnimeCard from './components/AnimeCard';
+import { useDebounce } from 'react-use';
+import { updateSearchCount } from './appwrite';
 
 const API_BASE_URL = 'https://api.jikan.moe/v4/anime';
-
-
 
 
 const App = () => {
@@ -14,6 +14,11 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [animeList, setAnimeList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
+
+  // Debounce the search term to prevent making too many API requests
+  // by waiting for the user to stop tryping for 500ms
+  useDebounce(() => setDebouncedSearchTerm(searchTerm), 500, [searchTerm]);
 
   const fetchAnime = async (query = '') => {
     setIsLoading(true);
@@ -40,6 +45,9 @@ const App = () => {
       }));
   
       setAnimeList(data); // Update the anime list state
+
+      updateSearchCount();
+
     } catch (error) {
       console.error(`Error fetching anime: ${error}`);
       setErrorMessage('Error fetching anime. Please try again later.');
@@ -49,10 +57,10 @@ const App = () => {
   }
 
   useEffect(() => {
-    if (searchTerm) {
-      fetchAnime(searchTerm);
+    if (debouncedSearchTerm) {
+      fetchAnime(debouncedSearchTerm);
     }
-  }, [searchTerm]);
+  }, [debouncedSearchTerm]);
 
   return (
     <main>
