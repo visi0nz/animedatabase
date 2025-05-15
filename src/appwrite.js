@@ -20,7 +20,7 @@ export const updateSearchCount = async (searchTerm, anime) => {
 
         // 2. If it does, update the count
         if(result.documents.length > 0 ) {
-            const doc = result.document[0];
+            const doc = result.documents[0];
 
             await database.updateDocument(DATABASE_ID, COLLECTION_ID, doc.$id, {
                 count: doc.count + 1,
@@ -30,7 +30,8 @@ export const updateSearchCount = async (searchTerm, anime) => {
             await database.createDocument(DATABASE_ID, COLLECTION_ID, ID.unique(), {
                 searchTerm,
                 count: 1,
-                anime,
+                poster_url: anime.images?.jpg?.image_url || '',
+                anime_id: anime.id || '',
             })
         }
 
@@ -40,4 +41,15 @@ export const updateSearchCount = async (searchTerm, anime) => {
 
 }
 
-// 1:50:38
+export const getTrendingAnime = async () => {
+    try {
+        const result = await database.listDocuments(DATABASE_ID, COLLECTION_ID, [
+            Query.limit(5),
+            Query.orderDesc("count")
+        ])
+
+        return result.documents;
+    } catch (error) {
+        console.error(error);
+    }
+}

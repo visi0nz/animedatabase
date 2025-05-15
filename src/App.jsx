@@ -4,7 +4,7 @@ import Search from './components/Search';
 import Spinner from './components/Spinner';
 import AnimeCard from './components/AnimeCard';
 import { useDebounce } from 'react-use';
-import { updateSearchCount } from './appwrite';
+import { getTrendingAnime, updateSearchCount } from './appwrite';
 
 const API_BASE_URL = 'https://api.jikan.moe/v4/anime';
 
@@ -13,6 +13,7 @@ const App = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [animeList, setAnimeList] = useState([]);
+  const [trendingAnime, setTrendingAnime] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
 
@@ -39,14 +40,16 @@ const App = () => {
         title: anime.title,
         images: anime.images,
         score: anime.score,
-        aired: anime.aired, // Include the aired field
+        aired: anime.aired, 
         genres: anime.genres,
         episodes: anime.episodes,
       }));
   
       setAnimeList(data); // Update the anime list state
 
-      updateSearchCount();
+      if(query && data.length > 0) {
+        await updateSearchCount(query, data[0]);
+      }
 
     } catch (error) {
       console.error(`Error fetching anime: ${error}`);
@@ -56,11 +59,26 @@ const App = () => {
     }
   }
 
+  const loadTrendingAnime = async () => {
+    try {
+      const anime = await getTrendingAnime();
+
+      setTrendingAnime(anime);
+
+    } catch (error) {
+      console.error(`Error fetching trending anime: ${error}`);
+    }
+  }
+
   useEffect(() => {
     if (debouncedSearchTerm) {
       fetchAnime(debouncedSearchTerm);
     }
   }, [debouncedSearchTerm]);
+
+  useEffect(() => {
+    loadTrendingAnime();
+  }, []);
 
   return (
     <main>
@@ -76,8 +94,22 @@ const App = () => {
           <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         </header>
 
+        {trendingAnime.length > 0 && (
+          <section className='trending'>
+            <h2>Trending Anime</h2>
+            <ul>
+              {trendingAnime.map((anime, index) => (
+                <li key={anime.$id}>
+                  <p>{index + 1}</p>
+                  <img src={anime.poster_url} alt={anime.title} />
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
         <section className="all-anime">
-          <h2 className='mt-[40px]'>All Anime</h2>
+          <h2>All Anime</h2>
 
           {isLoading ? (
             <Spinner />
