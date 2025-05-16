@@ -31,12 +31,12 @@
   }
 
   .header-text {
-  @apply text-white text-2xl sm:text-xl;
+  @apply text-white text-2xl sm:text-lg;
   font-family: "Pattaya", sans-serif;
   }
 
   .logo {
-  @apply fixed top-5 left-5 z-50 bg-transparent h-20 w-auto transition duration-500;
+  @apply fixed top-5 left-5 z-50 bg-transparent h-20 w-auto transition duration-500 sm:h-15;
   object-fit: contain;
   }
 
