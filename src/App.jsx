@@ -114,7 +114,7 @@ const App = () => {
           </a>
           </div>
           <div className="flex-1">
-          <img src="./hero.png" alt="Hero Banner" />
+          <img src="./hero.png" alt="Hero Banner" className="hero-img" />
           <h1>
             Find your next favorite <span className="text-gradient">Anime</span>.
           </h1>

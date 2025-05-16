@@ -31,12 +31,12 @@
   }
 
   .header-text {
-  @apply text-white text-2xl sm:text-lg;
+  @apply text-white text-xl sm:text-xl lg:text-2xl;
   font-family: "Pattaya", sans-serif;
   }
 
   .logo {
-  @apply fixed top-5 left-5 z-50 bg-transparent h-20 w-auto transition duration-500 sm:h-15;
+  @apply fixed top-5 left-5 z-50 bg-transparent h-15 w-auto transition duration-500 sm:h-20 md:h-20 lg:h-20;
   object-fit: contain;
   }
 
@@ -65,8 +65,8 @@
     @apply sm:mt-10 mt-5;
   }
 
-  header img {
-    @apply w-full max-w-xs sm:max-w-xs lg:max-w-2xs h-auto object-contain mx-auto drop-shadow-md;
+  .hero-img {
+    @apply w-40 sm:w-64 md:w-64 mx-auto h-auto lg:max-w-2xs object-contain drop-shadow-md;
   }
 }
 
