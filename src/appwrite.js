@@ -48,7 +48,18 @@ export const getTrendingAnime = async () => {
             Query.orderDesc("count")
         ])
 
-        return result.documents;
+        // Filter to only unique anime_id
+        const seen = new Set();
+        const unique = [];
+        for (const doc of result.documents) {
+            if (!seen.has(doc.anime_id)) {
+                seen.add(doc.anime_id);
+                unique.push(doc);
+            }
+            if (unique.length === 5) break; // show 5 unique trending anime
+        }
+
+        return unique; // return only unique trending anime
     } catch (error) {
         console.error(error);
     }
