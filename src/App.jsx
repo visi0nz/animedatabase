@@ -83,15 +83,43 @@ const App = () => {
   return (
     <main>
       <div className="pattern" />
-
       <div className="wrapper">
         <header>
+          <img
+            src="./logo.png"
+            alt="Logo"
+            className="logo logo-glow"
+          />
+          <div className="flex gap-4 fixed top-10 right-8 z-50">
+          <span className="header-text">Designed & Built by Emre Civas.</span>
+          <a
+            href="https://github.com/visi0nz"
+            target="_blank"
+            rel="noopener noreferrer"
+            >
+          <i
+            className="fab fa-github icon" 
+            alt="My Github profile"> 
+          </i>
+          </a>
+          <a
+            href="https://www.linkedin.com/in/emre-civas/"
+            target="_blank"
+            rel="noopener noreferrer"
+            >
+          <i 
+            className="fab fa-linkedin icon" 
+            alt="My Linkedin profile"> 
+          </i>
+          </a>
+          </div>
+          <div className="flex-1">
           <img src="./hero.png" alt="Hero Banner" />
           <h1>
             Find your next favorite <span className="text-gradient">Anime</span>.
           </h1>
-
           <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+          </div>
         </header>
 
         {trendingAnime.length > 0 && (
