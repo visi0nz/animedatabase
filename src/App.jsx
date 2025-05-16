@@ -85,11 +85,17 @@ const App = () => {
       <div className="pattern" />
       <div className="wrapper">
         <header>
+            <a
+            href="https://visi0nz.github.io/portfolio/"
+            target="_blank"
+            rel="noopener noreferrer"
+            >
           <img
             src="./logo.png"
             alt="Logo"
             className="logo logo-glow"
           />
+          </a>
           <div className="flex gap-4 fixed top-10 right-8 z-50">
           <span className="header-text">Designed & Built by Emre Civas.</span>
           <a
