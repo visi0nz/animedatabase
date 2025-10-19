@@ -97,7 +97,7 @@ const App = () => {
           />
           </a>
           <div className="flex gap-4 fixed top-10 right-8 z-50">
-          <span className="header-text">Designed & Built by Emre Civas.</span>
+          <span className="header-text">by Emre Civas.</span>
           <a
             href="https://github.com/visi0nz"
             target="_blank"
